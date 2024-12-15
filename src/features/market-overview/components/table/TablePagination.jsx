@@ -7,8 +7,45 @@ const TablePagination = ({
   totalPages, 
   totalItems, 
   itemsPerPage,
-  onPageChange 
+  setPage 
 }) => {
+  const handlePageChange = (newPage) => {
+    if (newPage >= 1 && newPage <= totalPages) {
+      setPage(newPage);
+    }
+  };
+
+  const getPageNumbers = () => {
+    const displayPages = 7; // Number of page buttons to show
+    let pages = [];
+    let start = Math.max(1, currentPage - Math.floor(displayPages / 2));
+    let end = Math.min(totalPages, start + displayPages - 1);
+    
+    // Adjust start if end is maxed out
+    if (end === totalPages) {
+      start = Math.max(1, end - displayPages + 1);
+    }
+    
+    // Add first page and ellipsis if needed
+    if (start > 1) {
+      pages.push(1);
+      if (start > 2) pages.push('...');
+    }
+    
+    // Add middle pages
+    for (let i = start; i <= end; i++) {
+      pages.push(i);
+    }
+    
+    // Add last page and ellipsis if needed
+    if (end < totalPages) {
+      if (end < totalPages - 1) pages.push('...');
+      pages.push(totalPages);
+    }
+    
+    return pages;
+  };
+
   return (
     <div className="flex items-center justify-between py-4">
       <div className="text-sm text-muted-foreground">
@@ -19,28 +56,32 @@ const TablePagination = ({
         <Button
           variant="outline"
           size="sm"
-          onClick={() => onPageChange(currentPage - 1)}
+          onClick={() => handlePageChange(currentPage - 1)}
           disabled={currentPage === 1}
         >
           <ChevronLeft className="h-4 w-4" />
           Previous
         </Button>
         <div className="flex items-center space-x-1">
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
-            <Button
-              key={page}
-              variant={currentPage === page ? "default" : "outline"}
-              size="sm"
-              onClick={() => onPageChange(page)}
-            >
-              {page}
-            </Button>
+          {getPageNumbers().map((page, index) => (
+            page === '...' ? (
+              <span key={`ellipsis-${index}`} className="px-2">...</span>
+            ) : (
+              <Button
+                key={page}
+                variant={currentPage === page ? "default" : "outline"}
+                size="sm"
+                onClick={() => handlePageChange(page)}
+              >
+                {page}
+              </Button>
+            )
           ))}
         </div>
         <Button
           variant="outline"
           size="sm"
-          onClick={() => onPageChange(currentPage + 1)}
+          onClick={() => handlePageChange(currentPage + 1)}
           disabled={currentPage === totalPages}
         >
           Next
