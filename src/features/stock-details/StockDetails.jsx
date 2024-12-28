@@ -1,60 +1,65 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Card, CardContent } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { TabsList, TabsTrigger, Tabs, TabsContent } from '@/components/ui/tabs';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Skeleton } from '@/components/ui/skeleton';
 import { CompanyOverview } from './components/CompanyOverview';
 import { FinancialMetrics } from './components/FinancialMetrics';
 import { QuarterlyResults } from './components/QuarterlyResults';
 import { TechnicalIndicators } from './components/TechnicalIndicators';
-import { useStockDetails } from './hooks/useStockDetails';
+import { api } from '@/services/api';
 
 const StockDetails = () => {
   const { symbol } = useParams();
-  const { data, loading, error } = useStockDetails(symbol);
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  if (loading) {
-    return (
-      <div className="space-y-4">
-        <Card>
-          <CardContent className="p-6">
-            <div className="space-y-4">
-              {Array(4).fill(null).map((_, i) => (
-                <div key={i} className="h-8 bg-gray-200 rounded animate-pulse" />
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!symbol) return;
+      try {
+        setLoading(true);
+        setError(null);
+        console.log('Fetching:', `/stock/${symbol}`);
+        const json = await api.get(`/stock/${symbol}`);
+        console.log('Response:', json);
+        setData(json);
+      } catch (err) {
+        console.error('Fetch error:', err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, [symbol]);
+
+  console.log('Render data:', data);
+
+  if (error) return <Alert variant="destructive"><AlertDescription>{error}</AlertDescription></Alert>;
+  if (loading) return (
+    <div className="space-y-4">
+      <Skeleton className="h-8 w-48" />
+      <Skeleton className="h-4 w-24" />
+      <div className="grid gap-4">
+        <Skeleton className="h-64" />
+        <Skeleton className="h-64" />
       </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <Card>
-        <CardContent className="p-6">
-          <div className="text-center">
-            <h3 className="text-lg font-medium">Error Loading Stock Details</h3>
-            <p className="text-sm text-muted-foreground mt-2">{error}</p>
-          </div>
-        </CardContent>
-      </Card>
-    );
-  }
-
-  const stockData = data?.stock || {};
-  const metrics = data?.formatted_metrics || {};
+    </div>
+  );
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">{stockData.company_name}</h1>
-        <p className="text-sm text-muted-foreground mt-1">
-          {stockData.symbol}
-        </p>
+    <div className="w-full space-y-4">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold">{data?.stock?.company_name || '--'}</h1>
+          <p className="text-gray-500">{symbol}</p>
+        </div>
       </div>
 
-      <Tabs defaultValue="overview" className="space-y-4">
-        <TabsList>
+      <Tabs defaultValue="overview" className="w-full">
+        <TabsList className="mb-4">
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="financials">Financials</TabsTrigger>
           <TabsTrigger value="quarterly">Quarterly Results</TabsTrigger>
@@ -64,15 +69,12 @@ const StockDetails = () => {
         <TabsContent value="overview">
           <CompanyOverview data={data} />
         </TabsContent>
-
         <TabsContent value="financials">
           <FinancialMetrics data={data} />
         </TabsContent>
-
         <TabsContent value="quarterly">
-          <QuarterlyResults data={data} />
+          <QuarterlyResults data={data?.stock?.financial_metrics} />
         </TabsContent>
-
         <TabsContent value="technical">
           <TechnicalIndicators data={data} />
         </TabsContent>
