@@ -1,10 +1,11 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   TableCell,
   TableRow as TableRowUI,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Brain, MoreVertical } from "lucide-react";
+import { Brain, BarChart2, MoreVertical } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,8 +15,13 @@ import {
 import { formatValue, getGrowthClass, getRecommendationClass } from '../../utils/formatters';
 
 const TableRow = ({ stock, visibleColumns, onAnalysisClick }) => {
+  const navigate = useNavigate();
   const growthClass = getGrowthClass(stock.net_profit_growth);
   
+  const handleViewDetails = () => {
+    navigate(`/stocks/${stock.symbol}`);
+  };
+
   const renderEstimates = (estimates) => {
     if (!estimates || estimates === '--') return '--';
     
@@ -35,7 +41,12 @@ const TableRow = ({ stock, visibleColumns, onAnalysisClick }) => {
     <TableRowUI className="group hover:bg-slate-50">
       {visibleColumns.company_name && (
         <TableCell className="font-medium">
-          {stock.company_name || '--'}
+          <button 
+            onClick={handleViewDetails}
+            className="hover:text-blue-600 hover:underline text-left"
+          >
+            {stock.company_name || '--'}
+          </button>
         </TableCell>
       )}
       {visibleColumns.cmp && (
@@ -97,6 +108,10 @@ const TableRow = ({ stock, visibleColumns, onAnalysisClick }) => {
             <DropdownMenuItem onClick={() => onAnalysisClick(stock)}>
               <Brain className="h-4 w-4 mr-2" />
               View Analysis
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={handleViewDetails}>
+              <BarChart2 className="h-4 w-4 mr-2" />
+              View Details
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
