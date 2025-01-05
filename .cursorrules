@@ -1,45 +1,89 @@
 # Project-Specific Instructions for Cursor AI
 
 ## General Guidelines
-- Write clean, maintainable, and well-documented React code.
-- Adhere to the Airbnb JavaScript Style Guide for consistent code formatting.
-- Prioritize component reusability and modularity.
+- Write clean, maintainable, and well-documented React code
+- Adhere to the Airbnb JavaScript Style Guide
+- Prioritize component reusability and modularity
+- Use JSX for React components with `.jsx` extension
 
 ## Code Structure
-- Use functional components exclusively; avoid class components.
-- Organize components into a `components` directory, with each component in its own subdirectory.
-- Co-locate component-specific styles and tests within the same subdirectory.
+- Organize code using feature-based architecture:
+  - `src/features/{feature-name}/components/`
+  - `src/features/{feature-name}/hooks/`
+  - `src/features/{feature-name}/utils/`
+- Use functional components exclusively
+- Co-locate related files (components, tests, styles) in feature directories
+- Place shared UI components in `src/components/ui`
+
+## Component Architecture
+- Follow atomic design principles:
+  - Atoms: Basic UI components (`Button`, `Input`, etc.)
+  - Molecules: Composite components
+  - Organisms: Complex, self-contained features
+- Implement error boundaries at feature level
+- Use loading states and skeletons for better UX
 
 ## State Management
-- Utilize React's built-in `useState` and `useReducer` hooks for local component state.
-- For global state management, implement the Context API or Redux Toolkit as appropriate.
+- Use React hooks for local state (`useState`, `useReducer`)
+- Implement custom hooks for complex logic and API interactions
+- Follow the container/presenter pattern where applicable
 
 ## Styling
-- Apply CSS Modules for component-scoped styling to prevent class name collisions.
-- Follow a consistent naming convention for CSS classes using BEM (Block Element Modifier) methodology.
+- Use Tailwind CSS with consistent class naming
+- Leverage `class-variance-authority` for component variants
+- Follow utility-first CSS approach
+- Use `cn()` utility for conditional class merging
 
-## Testing
-- Write unit tests for all components using the React Testing Library and Jest.
-- Achieve a minimum of 80% test coverage across the codebase.
-- Ensure tests are deterministic and do not rely on external data sources.
+## Component Libraries
+- Use Radix UI primitives for accessible components
+- Implement consistent component APIs using shadcn/ui patterns
+- Maintain consistent prop interfaces across components
 
-## Performance Optimization
-- Implement React's `memo` and `useMemo` hooks to prevent unnecessary re-renders.
-- Use dynamic imports with React's `lazy` and `Suspense` for code splitting and lazy loading of components.
+## Error Handling
+- Implement error boundaries for feature-level error catching
+- Use toast notifications for user feedback
+- Provide fallback UI for error states
+- Include retry mechanisms where appropriate
+
+## Performance
+- Implement React.memo for expensive renders
+- Use dynamic imports for code splitting
+- Implement loading states and skeleton screens
+- Optimize bundle size with proper imports
 
 ## Accessibility
-- Follow WAI-ARIA guidelines to ensure components are accessible.
-- Use semantic HTML elements and provide appropriate `aria` attributes where necessary.
-- Test accessibility using tools like axe-core and ensure compliance with WCAG 2.1 standards.
+- Follow WAI-ARIA guidelines
+- Implement keyboard navigation
+- Provide proper ARIA labels and roles
+- Ensure proper color contrast ratios
 
 ## Documentation
-- Include JSDoc comments for all functions and components.
-- Maintain an up-to-date `README.md` with setup instructions, project structure, and coding conventions.
+- Include JSDoc comments for components and hooks
+- Document component props using PropTypes or TypeScript
+- Maintain README files for features and shared components
+- Include usage examples for reusable components
 
 ## Version Control
-- Write descriptive commit messages following the Conventional Commits specification.
-- Ensure all code passes linting and tests before committing.
-- Use feature branches for new development and submit pull requests for code reviews.
+- Follow conventional commits specification
+- Include meaningful PR descriptions
+- Keep components focused and single-responsibility
+- Review code for proper error handling and accessibility
+
+## Icons and Assets
+- Use Lucide React for consistent iconography
+- Optimize SVG icons and images
+- Maintain consistent icon sizing and coloring
+
+## Forms and Validation
+- Implement consistent form handling patterns
+- Use proper input validation and error states
+- Provide clear user feedback for form actions
+
+## API Integration
+- Use axios for HTTP requests
+- Implement proper error handling for API calls
+- Include loading and error states
+- Cache API responses where appropriate
 
 ## AI Interaction
 - Provide detailed prompts to the AI for accurate code generation.
