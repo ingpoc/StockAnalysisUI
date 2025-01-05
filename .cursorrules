@@ -1,0 +1,48 @@
+# Project-Specific Instructions for Cursor AI
+
+## General Guidelines
+- Write clean, maintainable, and well-documented React code.
+- Adhere to the Airbnb JavaScript Style Guide for consistent code formatting.
+- Prioritize component reusability and modularity.
+
+## Code Structure
+- Use functional components exclusively; avoid class components.
+- Organize components into a `components` directory, with each component in its own subdirectory.
+- Co-locate component-specific styles and tests within the same subdirectory.
+
+## State Management
+- Utilize React's built-in `useState` and `useReducer` hooks for local component state.
+- For global state management, implement the Context API or Redux Toolkit as appropriate.
+
+## Styling
+- Apply CSS Modules for component-scoped styling to prevent class name collisions.
+- Follow a consistent naming convention for CSS classes using BEM (Block Element Modifier) methodology.
+
+## Testing
+- Write unit tests for all components using the React Testing Library and Jest.
+- Achieve a minimum of 80% test coverage across the codebase.
+- Ensure tests are deterministic and do not rely on external data sources.
+
+## Performance Optimization
+- Implement React's `memo` and `useMemo` hooks to prevent unnecessary re-renders.
+- Use dynamic imports with React's `lazy` and `Suspense` for code splitting and lazy loading of components.
+
+## Accessibility
+- Follow WAI-ARIA guidelines to ensure components are accessible.
+- Use semantic HTML elements and provide appropriate `aria` attributes where necessary.
+- Test accessibility using tools like axe-core and ensure compliance with WCAG 2.1 standards.
+
+## Documentation
+- Include JSDoc comments for all functions and components.
+- Maintain an up-to-date `README.md` with setup instructions, project structure, and coding conventions.
+
+## Version Control
+- Write descriptive commit messages following the Conventional Commits specification.
+- Ensure all code passes linting and tests before committing.
+- Use feature branches for new development and submit pull requests for code reviews.
+
+## AI Interaction
+- Provide detailed prompts to the AI for accurate code generation.
+- Review and test AI-generated code thoroughly before integration.
+- Update this `.cursorrules` file as project requirements evolve.
+
